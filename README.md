@@ -1,48 +1,47 @@
-# Web Scraper con Selenium
+# README
 
-Este proyecto es un script de Python que utiliza Selenium para realizar web scraping en páginas web específicas. Está diseñado para automatizar la recopilación de datos y su almacenamiento en archivos CSV para un análisis posterior.
+Este script de Python utiliza la biblioteca Selenium WebDriver para automatizar el proceso de búsqueda y extracción de URLs de imágenes de productos en el sitio web `https://www.luxestudio.es`. A continuación, se describen las principales secciones y funciones del script, así como el flujo general del programa.
 
-## Descripción
+## Dependencias
+- **Selenium**: Para automatizar la interacción con el navegador.
+- **Pandas**: Para la manipulación y análisis de datos.
+- **Logging**: Para registrar información relevante durante la ejecución del script.
 
-El `scraper.py` es capaz de iniciar sesión en un sitio web, navegar por los elementos de la página, extraer información relevante y guardar esos datos en un archivo CSV. Además, registra el índice del último producto procesado para permitir un scraping eficiente por lotes.
+## Configuración Inicial
+1. Configuración de **logging**: Se establece la configuración básica del registro para que muestre la hora, el nivel de gravedad y el mensaje.
+2. Inicialización del **WebDriver**: Se crea una nueva instancia del navegador Chrome.
 
-## Instalación
+## Funciones Principales
+1. **login()**:
+   - Navega a la página de inicio de sesión.
+   - Encuentra los campos de correo electrónico y contraseña, los llena y envía el formulario.
+   - Espera hasta que la página de contenido esté cargada para confirmar el inicio de sesión.
 
-Asegúrate de tener Python 3.x instalado en tu sistema y sigue estos pasos para instalar las dependencias necesarias:
+2. **check_session_and_relogin()**:
+   - Verifica si la sesión se ha cerrado comprobando la URL actual.
+   - Si es necesario, inicia sesión nuevamente y navega de vuelta a la página de medios.
 
-### Dependencias
+3. **get_last_processed_index(filename)**:
+   - Lee y retorna el último índice de producto procesado desde un archivo.
+   - Si el archivo no existe, retorna 0.
 
-Instala las siguientes dependencias utilizando `pip`:
+4. **search_and_extract_image_url(driver, product_name)**:
+   - Divide el nombre del producto en partes y crea términos de búsqueda.
+   - Realiza una búsqueda en la página de medios y extrae la URL de la imagen del producto.
+   - Realiza varios intentos en caso de excepciones durante la búsqueda.
 
-```bash
-pip install selenium pandas
-```
+## Flujo Principal del Programa
+1. Intenta iniciar sesión inicialmente usando la función `login()`.
+2. Navega a la página de medios.
+3. Carga el archivo CSV `archivo.csv` y obtiene el último índice de producto procesado.
+4. Itera sobre los productos en el archivo CSV:
+   - Verifica y re-inicia sesión si es necesario.
+   - Busca y extrae la URL de la imagen del producto o hereda la imagen del producto padre si está disponible.
+   - Actualiza el DataFrame y guarda el índice del último producto procesado.
+5. Guarda el DataFrame actualizado en un nuevo archivo CSV `archivo-updated.csv`.
+6. En caso de cualquier excepción, registra el error y cierra el navegador.
+7. Finalmente, guarda el índice del último producto procesado en un archivo y cierra el navegador.
 
-Además, necesitarás descargar el WebDriver para Chrome que coincida con tu versión actual de Google Chrome.
-
-### Configuración
-
-Antes de ejecutar el script, asegúrate de configurar las siguientes variables dentro del script:
-
-- Credenciales de usuario para el inicio de sesión (usuario y contraseña).
-- Parámetros de búsqueda o navegación específicos del sitio.
-
-## Uso
-
-Para ejecutar el script, abre una terminal y corre el siguiente comando:
-
-```bash
-python scraper.py
-```
-
-El script iniciará una sesión de Chrome, realizará el proceso de scraping y guardará los resultados en `archivo-updated.csv`. También se guardará el índice del último producto procesado en `ultimo_producto.txt` para futuras ejecuciones.
-
-## Contribución
-
-Si deseas contribuir al proyecto, sigue estos pasos:
-
-Proximamente 
-
-## Manejo de Errores
-
-El script utiliza logging para registrar eventos y errores. Si ocurre un error durante la ejecución, revisa el archivo de log para obtener detalles y posibles soluciones.
+## Instrucciones para la Ejecución
+1. Asegúrate de tener instaladas las bibliotecas necesarias y el `chromedriver` correspondiente a tu versión de Chrome.
+2. Ejecuta el script y revisa los registros para monitorear el progreso y detectar cualquier posible error.
