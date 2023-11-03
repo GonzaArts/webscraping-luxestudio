@@ -1,4 +1,4 @@
-# README
+# Web Scraping Luxostudio para imagenes
 
 Este script de Python utiliza la biblioteca Selenium WebDriver para automatizar el proceso de búsqueda y extracción de URLs de imágenes de productos en el sitio web `https://www.luxestudio.es`. A continuación, se describen las principales secciones y funciones del script, así como el flujo general del programa.
 
